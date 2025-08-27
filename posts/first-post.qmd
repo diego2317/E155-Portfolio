@@ -1,8 +1,8 @@
 ---
 title: "Hello Quarto"
 description: "Welcome to my Quarto portfolio"
-author: "Josh Brake"
-date: "8/23/24"
+author: "Diego Weiss"
+date: "8/27/25"
 categories:
   - reflection
   - labreport
