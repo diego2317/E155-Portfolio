@@ -1,0 +1,15 @@
+---
+title: "E155 Portfolio"
+image: images/headshot.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/diego2317
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/diegoweiss/
+---
+
+Hi! I'm Diego Weiss, a Junior Engineering major at [Harvey Mudd College](https://hmc.edu).
