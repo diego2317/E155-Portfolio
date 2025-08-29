@@ -1,6 +1,6 @@
 ---
-title: "Hello Quarto"
-description: "Welcome to my Quarto portfolio"
+title: "Lab 1: FPGA and MCU Setup and Testing"
+description: ""
 author: "Diego Weiss"
 date: "8/27/25"
 categories:
