@@ -1,16 +1,16 @@
 [
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "E155 Blog",
-    "section": "",
-    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 27, 2025\n\n\nDiego Weiss\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "E155 Portfolio",
     "section": "",
-    "text": "Hi! I’m Diego Weiss, a Junior Engineering major at Harvey Mudd College."
+    "text": "Hi! I’m Diego Weiss, a Junior Engineering major at Harvey Mudd College. My main interests fall in the fields of robotics, controls, and embedded systems. If I’m not locked in the basement of Harvey Mudd’s engineering building, you can find me rock climbing, hiking, or playing soccer with my friends. Or, if it’s a Saturday/Sunday, you have a decent chance of finding me sat staring blankly at a TV watching my favorite soccer team (Manchester United) lose."
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "E155 Blog",
+    "section": "",
+    "text": "Lab 1: FPGA and MCU Setup and Testing\n\n\n\n\n\n\n\n\nAug 27, 2025\n\n\nDiego Weiss\n\n\n\n\n\nNo matching items"
   }
 ]
