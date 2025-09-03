@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,15 +34,14 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-80c414b3e59ad0d72c8a5310db72653d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,8 +81,6 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -113,8 +110,27 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#soldering-the-development-board" id="toc-soldering-the-development-board" class="nav-link" data-scroll-target="#soldering-the-development-board">Soldering the Development Board</a></li>
+  <li><a href="#technical-documentation" id="toc-technical-documentation" class="nav-link" data-scroll-target="#technical-documentation">Technical Documentation</a>
+  <ul class="collapse">
+  <li><a href="#block-diagram" id="toc-block-diagram" class="nav-link" data-scroll-target="#block-diagram">Block Diagram</a></li>
+  <li><a href="#led-control" id="toc-led-control" class="nav-link" data-scroll-target="#led-control">LED Control</a></li>
+  <li><a href="#segment-display-control" id="toc-segment-display-control" class="nav-link" data-scroll-target="#segment-display-control">7-Segment Display Control</a></li>
+  <li><a href="#schematic" id="toc-schematic" class="nav-link" data-scroll-target="#schematic">Schematic</a></li>
+  </ul></li>
+  <li><a href="#results-and-discussion" id="toc-results-and-discussion" class="nav-link" data-scroll-target="#results-and-discussion">Results and Discussion</a>
+  <ul class="collapse">
+  <li><a href="#testbench-simulation" id="toc-testbench-simulation" class="nav-link" data-scroll-target="#testbench-simulation">Testbench Simulation</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -154,8 +170,103 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This lab involved soldering all the parts for the E155 development board. In addition, a design was implemented on the FPGA to operate a 7-segment LED display and control several other LEDs.</p>
+</section>
+<section id="soldering-the-development-board" class="level2">
+<h2 class="anchored" data-anchor-id="soldering-the-development-board">Soldering the Development Board</h2>
+<p>We were given a multitude of parts, both SMT and THT components. Soldering them to the E155 development board took approximately three hours, with the first thirty minutes spent attempting to solder the 5V regulator to the board. Figure 1 displays the completed development board.</p>
+<p><strong>INSERT DEV BOARD IMAGE HERE</strong></p>
+</section>
+<section id="technical-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="technical-documentation">Technical Documentation</h2>
+<p>The source code for the project can be found in the lab 1 folder of my <a href="https://github.com/diego2317/E155">Github repository for E155</a>.</p>
+<section id="block-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="block-diagram">Block Diagram</h3>
+<p>Figure 2 (below) contains the block diagram used to design the combinational logic to drive the LEDs and 7-segment display.<br>
+</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/lab1/lab1_blockdiagram.jpg" class="img-fluid figure-img"></p>
+<figcaption>Figure 2</figcaption>
+</figure>
+</div>
+</section>
+<section id="led-control" class="level3">
+<h3 class="anchored" data-anchor-id="led-control">LED Control</h3>
+<p>Table 1 contains the truth table used to determine the state of the LEDs.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">s[0]</th>
+<th style="text-align: center;">s[1]</th>
+<th style="text-align: center;">led[0]</th>
+<th style="text-align: center;">s[2]</th>
+<th style="text-align: center;">s[3]</th>
+<th style="text-align: center;">led[1]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">OFF</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">OFF</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">ON</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">OFF</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">ON</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">OFF</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">OFF</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">ON</td>
+</tr>
+</tbody>
+</table>
+<p>By inspection of figure 2, we see that led[0] is determined by s[0] XOR s[1], and led[1] is determined by s[2] AND s[3]. In order to blink led[2] at 2.4Hz, the HSOSC module was used to create a clock with a frequency of 24MHz. I then encoded a digitally controlled oscillator, using the formula <code>f_LED = f_clk * p / 2^N</code>. I chose values p = 430 and N = 32, theoretically producing an oscillator with a frequency of 2.403 Hz.</p>
+</section>
+<section id="segment-display-control" class="level3">
+<h3 class="anchored" data-anchor-id="segment-display-control">7-Segment Display Control</h3>
+<p>The 7-segment display is controlled by a submodule that converts the input switches (s[3:0]) into a 7-bit output (s[6:0]). The submodule contains a case statement that converts each of the 16 possible 4-bit inputs into the corresponding values needed to illuminate the 7-segment display and create the corresponding hexadecimal number. Because the 7-segment display is common anode, the necessary pins are pulled to 0 to illuminate the necessary segments. For example, the input 4’h0 is converted to 7’b1000000. s[0] corresponds to segment A and s[6] corresponds to segment G of the 7-segment display. See figure 3 for the layout. <img src="..\images/lab1/7segdisplay.png" class="quarto-figure quarto-figure-center" height="300" alt="Figure 3"></p>
+</section>
+<section id="schematic" class="level3">
+<h3 class="anchored" data-anchor-id="schematic">Schematic</h3>
+<p>I consulted the datasheet of the <strong>SOMETHING</strong> to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.</p>
+<p><strong>INSERT SCHEMATIC HERE</strong></p>
+</section>
+</section>
+<section id="results-and-discussion" class="level2">
+<h2 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h2>
+<section id="testbench-simulation" class="level3">
+<h3 class="anchored" data-anchor-id="testbench-simulation">Testbench Simulation</h3>
+<p>I created testbenches for each of the submodules (<code>led_controller.sv</code> and <code>display_controller.sv</code>) as well as a testbench for the top-level module. Figure BLANK shows a screenshot of the QuestaSim simulations. Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2.4Hz.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The development board succesfully drove the 7-segment display and controlled the three LEDs as desired. This lab took 20 hours.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
