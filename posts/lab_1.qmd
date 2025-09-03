@@ -43,14 +43,41 @@ The 7-segment display is controlled by a submodule that converts the input switc
 ![Figure 3](/images/lab1/7segdisplay.png){fig-align="center" height=300}
 
 ### Schematic
-I consulted the [https://www.alldatasheet.com/datasheet-pdf/view/130748/HP/HDSP-511A.html](datasheet) of the HDSP-511A display to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.
+I consulted the [datasheet](https://www.alldatasheet.com/datasheet-pdf/view/130748/HP/HDSP-511A.html) of the HDSP-511A display to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.
 
-![Schematic](/images/lab1/lab1schematic.jpg)
+![Schematic](/images/lab1/lab1schematic.png)
+
+In order to keep the current draw for each segment within recommended operating conditions, I used some Ohm's law calculations. The datasheet of the HDSP-511A display recommends a maximum forward current of 15 mA. Since the FPGA supplies 3.3V, I chose 390 Ohm resistors, which result in a current of ~8.5mA.
 
 ## Results and Discussion
 
 ### Testbench Simulation
-I created testbenches for each of the submodules (`led_controller.sv` and `display_controller.sv`) as well as a testbench for the top-level module. Figure BLANK shows a screenshot of the QuestaSim simulations. Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2.4Hz.
+I created testbenches for each of the submodules (`led_controller.sv` and `display_controller.sv`) as well as a testbench for the top-level module. The images below show a screenshot of the QuestaSim simulations for my top-level module. 
+![Top level module waveforms](/images/lab1/lab1_dw_waveforms.png)
+![Top level module testbench](/images/lab1/lab1_dw_terminal.png)
+\
+\
+Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2.43Hz. The image below is a picture I took of the oscilloscope, where the frequency of the waveform can be seen in the bottom right.
+![Oscilloscope](/images/lab1/oscope.jpg)
 
 ## Conclusion
-The development board succesfully drove the 7-segment display and controlled the three LEDs as desired. This lab took 20 hours.
+The development board succesfully drove the 7-segment display and controlled the three LEDs as desired. This lab took 23 hours.
+
+## AI Prototype
+When I presented ChatGPT 5 with the task of using the Lattice UP5K FPGA's internal high-speed oscillator to blink an LED at 2Hz, the SystemVerilog it provided synthesized, but Lattice Radiant was unable to place and route the design. It attempted to use the SB_HFOSC module, but provided an alternate solution in the initial Verilog. The code block was as follows:
+```SystemVerilog
+// Use SB_HFOSC (recommended for iCE40UP5K)
+    SB_HFOSC #(
+        .CLKHF_DIV(HF_DIV)
+    ) u_hfosc (
+        .CLKHFPU (1'b1),   // power up
+        .CLKHFEN (1'b1),   // enable
+        .CLKHF   (clk_hf)
+    );
+
+    // If your toolflow expects HSOSC instead, you can swap to:
+    // HSOSC u_hfosc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(clk_hf));
+
+```
+Once the project failed to place and route, I commented out the block using `SB_HFOSC` and uncommented the block using `HSOSC`. Making this change enabled Lattice Radiant to succesfully place and route the design. I was impressed by the quality of the output. GPT5 avoided overcommenting, which has been an issue in the past. However, the SystemVerilog provided still contained the right amount of comments for me to easily understand it. \
+GPT5 used some syntax that was unfamiliar to me. It made use of `localparam int unsigned` to generate integers, which I hadn't seen in SystemVerilog before. However, the new syntax it introduced was easy enough to understand. It wouldn't surprise me the part of the prompt I gave GPT5 that read "Take full advantage of SystemVerilog syntax, for example, using logic instead of wire and reg" contributed to the quality of the Verilog it generated. Moving forward, this serves as a good example of how effective prompting of LLMs can lead to much higher quality output.
