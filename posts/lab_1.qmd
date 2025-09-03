@@ -43,9 +43,9 @@ The 7-segment display is controlled by a submodule that converts the input switc
 ![Figure 3](/images/lab1/7segdisplay.png){fig-align="center" height=300}
 
 ### Schematic
-I consulted the datasheet of the **SOMETHING** to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.
+I consulted the [https://www.alldatasheet.com/datasheet-pdf/view/130748/HP/HDSP-511A.html](datasheet) of the HDSP-511A display to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.
 
-**INSERT SCHEMATIC HERE**
+![Schematic](/images/lab1/lab1schematic.jpg)
 
 ## Results and Discussion
 
