@@ -12,4 +12,4 @@ about:
       href: https://www.linkedin.com/in/diegoweiss/
 ---
 
-Hi! I'm Diego Weiss, a Junior Engineering major at [Harvey Mudd College](https://hmc.edu). My main interests fall in the fields of robotics, controls, and embedded systems. If I'm not locked in the basement of Harvey Mudd's engineering building, you can find me rock climbing, hiking, backcountry snowboarding, and playing soccer with my friends.
+Hi! I'm Diego Weiss, a Junior Engineering major at [Harvey Mudd College](https://hmc.edu). My main interests fall in the fields of robotics, controls, and embedded systems. When not at school, you can find me rock climbing, hiking, backcountry snowboarding, and playing soccer with my friends.
