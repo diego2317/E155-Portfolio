@@ -45,7 +45,7 @@ The 7-segment display is controlled by a submodule that converts the input switc
 ### Schematic
 I consulted the [datasheet](https://www.alldatasheet.com/datasheet-pdf/view/130748/HP/HDSP-511A.html) of the HDSP-511A display to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.
 
-![Schematic](/images/lab1/lab1schematic.png)
+![Schematic](/images/lab1/lab1schematic_new.png)
 
 In order to keep the current draw for each segment within recommended operating conditions, I used some Ohm's law calculations. The datasheet of the HDSP-511A display recommends a maximum forward current of 15 mA. Since the FPGA supplies 3.3V, I chose 390 Ohm resistors, which result in a current of ~8.5mA.
 
