@@ -210,6 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="block-diagram" class="level3">
 <h3 class="anchored" data-anchor-id="block-diagram">Block Diagram</h3>
 <p>Before I wrote any SystemVerilog, I created the following block diagram. This helped me understand the structure I believed my design should have prior to implementation. <img src="..\images/lab2/lab2blockdiagram.png" class="img-fluid" alt="Block Diagram">.</p>
+<p>I used a 16-bit clock divider to take the internal 24MHz clock to 366 Hz, which was used to determine the refresh rate of the 7-segment displays. This was determined to be an acceptable refresh rate by visual inspection, as the displays neither flickered nor had the LEDs bleed together.</p>
 </section>
 <section id="testbenches" class="level3">
 <h3 class="anchored" data-anchor-id="testbenches">Testbenches</h3>
