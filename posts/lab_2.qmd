@@ -19,6 +19,8 @@ The source code for the project can be found in the lab 2 folder of my [Github r
 Before I wrote any SystemVerilog, I created the following block diagram. This helped me understand the structure I believed my design should have prior to implementation.
 ![Block Diagram](/images/lab2/lab2blockdiagram.png).
 
+I used a 16-bit clock divider to take the internal 24MHz clock to 366 Hz, which was used to determine the refresh rate of the 7-segment displays. This was determined to be an acceptable refresh rate by visual inspection, as the displays neither flickered nor had the LEDs bleed together.
+
 ### Testbenches
 The waveforms and terminal outputs for `display_logic.sv`, `display_controller.sv`, and `led_controller.sv` are at the bottom of this section. `display_logic.sv` and `led_controller.sv` solely contained combinational logic. Each of these modules passed their respective testbenches. I wrote python scripts to generate test vectors for `led_controller`, `display_controller`, and `lab2_dw`. I also modified `display_controller` while testing it and while testing my top-level module. The only modification made was deactivating the clock divider in order to increase the speed of testing. The modifications can be seen below, along with the waveforms and terminal output for `lab2_dw`. 
 ```SystemVerilog
