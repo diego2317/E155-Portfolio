@@ -2,7 +2,7 @@
 title: "Lab 2: Multiplexed 7-Segment Display"
 description: ""
 author: "Diego Weiss"
-date: "8/27/25"
+date: "9/10/25"
 categories:
   - reflection
   - labreport
