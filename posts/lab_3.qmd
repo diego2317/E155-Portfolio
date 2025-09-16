@@ -6,7 +6,7 @@ date: "9/15/25"
 categories:
   - reflection
   - labreport
-draft: true
+draft:
 ---
 
 ## Introduction
@@ -22,3 +22,19 @@ Here's my block diagram
 
 Here's my FSM
 ![FSM](/images/lab3/lab3FSM.png)
+
+
+### Waveforms
+
+::: {.callout-note collapse="true"}
+#### Waveform Gallery
+
+![Keypad Decoder Waves](/images/lab3/keypad_decoder_waves.png)
+![Keypad Decoder Output](/images/lab3/keypad_decoder_waves.png)
+
+![Keypad Input Waves](/images/lab3/keypad_input_waves.png)
+![Keypad Input Testbench Output](/images/lab3/keypad_input_terminal.png)
+
+![Keypad Reader Waves](/images/lab3/keypad_reader_waves.png)
+![Keypad Reader Testbench Output](/images/lab3/keypad_reader_terminal.png)
+:::
