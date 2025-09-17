@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "posts/lab_3.html",
+    "href": "posts/lab_3.html",
+    "title": "Lab 3: Keypad Scanner",
+    "section": "",
+    "text": "The goal of this lab was to learn how to use an FPGA to scan inputs from a keypad, and then output the two most recent inputs on the multiplexed 7-segment display from lab 2. The crux of this lab was ensuring I followed synchronous design principles, as well as designing an FSM that took switch debouncing into account. The lab 3 page of the E155 website has more information about the lab."
+  },
+  {
+    "objectID": "posts/lab_3.html#introduction",
+    "href": "posts/lab_3.html#introduction",
+    "title": "Lab 3: Keypad Scanner",
+    "section": "",
+    "text": "The goal of this lab was to learn how to use an FPGA to scan inputs from a keypad, and then output the two most recent inputs on the multiplexed 7-segment display from lab 2. The crux of this lab was ensuring I followed synchronous design principles, as well as designing an FSM that took switch debouncing into account. The lab 3 page of the E155 website has more information about the lab."
+  },
+  {
+    "objectID": "posts/lab_3.html#technical-documentation",
+    "href": "posts/lab_3.html#technical-documentation",
+    "title": "Lab 3: Keypad Scanner",
+    "section": "Technical Documentation",
+    "text": "Technical Documentation\nThe source code for the project can be found in the lab 3 folder of my Github repository for E155.\n\nCircuit Design\nUnlike previous labs, I began this one by designing my circuits. I made this decision because I felt like doing so would prove beneficial in going through the rest of the lab. The circuit I designed can be seen below. It features two 2N3906 PNP transistors being used to power the 7-segment display. The rational behind my design choices for the circuitry involving the transistors and the 7-segment display can be found in my writeup for lab 2.\nTo design my keypad scanning scheme, I made the initial decision that I would drive the rows of the keypad as outputs and read the columns as inputs. I chose to drive my rows high, which meant that to “select” a row to read I would drive it low (keeping the rest of the rows high) and read the columns. If I pressed a key in the row I was reading, it would short that row and column together, which means that a key press is represented by a low voltage level instead of a high one. I used the internal 100 kOhm resistors on the FPGA to enable this behavior. My pin assignments and general wiring are displayed in the circuits below.\n\n\n\nCircuit\n\n\n\n\nFSM\nThe next step I took was developing my FSM. Initially, I planned on utilizing two completely separate FSMs, one for scanning the rows and one for debouncing once a key was pressed. However, I ended up combining my initial two ideas into one big FSM, which can be seen below. In the FSM, a 1 represents a key press being detected and a 0 represents no keys being pressed. I used a counter to keep track of how many clock cycles had passed, with the counter incrementing each clock cycle. In order to deal with the delay from the synchronizer, the FSM stays in the BUFFER states for two clock cycles, which is how long it takes my synchronizer to synchronize the inputs. Whenever the FSM enters any of the ROW, PULSE, or WAIT states, the counter is reset to 0. To solve debouncing, I have the counter increment by 1 per clock cycle if it’s in a DEBOUNCE state. Once counter has incremented 16 times (counter = 15), the transition can be made to the PULSE state if the key is still pressed. In the PULSE state, the FSM sends a signal called PRESS to my next-state logic. PRESS serves as a select signal to determine whether or not a new key has been pressed, which then enables the updating of the 7-segment display. My full FSM can be seen below, as well as its associated state transition table.\n\n\n\nFSM\n\n\n\n\n\nTruth Table\n\n\n\n\nBlock Diagram + Verilog Design\nImplementing this design required 9 separate SystemVerilog modules, including the top-level module and the built-in HSOSC module for clock generation. After initializing a clock to 24 MHz using the HSOSC module, I divided the clock down to 1.2 kHz using a module of my own design. This new “slow clock” then became the system-level clock. The modules for controlling the 7-segment display were taken from lab 2, although the multiplexer module was modified to divide the clock by a factor of two instead of 2^15. This meant that the 7-segment display has a refresh rate of 600Hz, which is sufficient to not notice flickering. I chose a 1.2kHz clock so that once the FSM went through the 16 debounce clock cycles, there would be no risk that the switch was bouncing. This also meant that a button would need to be pressed for approximately 13 ms to be recognized as pressed, which I felt was reasonable. The block diagram for my system can be seen below.\n\n\n\nBlock Diagram\n\n\n\n\nWaveforms\nBefore testing my physical system, I wrote testbenches for all of my modules (except for the 7-segment display logic module, which has been the same since lab 1). This meant that once it was time to build my physical system, I was able to get it working quickly. The waveforms and testbench output for my top-level module can be seen below. The Waveform Gallery can be expanded to view the waveforms and testbench output for the rest of my modules.\n\n\n\nTop Level Module Testbench Waveforms\n\n\n\n\n\nTop Level Module Testbench Output\n\n\n\n\n\n\n\n\nWaveform Gallery\n\n\n\n\n\n\n\n\nKeypad Decoder Testbench Waveforms\n\n\n\n\n\nKeypad Decoder Testbench Output\n\n\n\n\n\nKeypad Input Testbench Waveforms\n\n\n\n\n\nKeypad Input Testbench Output\n\n\n\n\n\nKeypad Reader Testbench Waveforms\n\n\n\n\n\nKeypad Reader Testbench Output\n\n\n\n\n\nSeven Segment Controller Testbench Waveforms\n\n\n\n\n\nSeven Segment Controller Testbench Output\n\n\n\n\n\nSynchronizer Testbench Waveforms\n\n\n\n\n\nSynchronizer Testbench Output\n\n\n\n\n\n\n\nConclusion\nThe design meets all the requirements. I spent somewhere between 25 and 30 hours on this lab."
+  },
+  {
     "objectID": "posts/lab_1.html",
     "href": "posts/lab_1.html",
     "title": "Lab 1: FPGA and MCU Setup and Testing",
@@ -53,7 +74,7 @@
     "href": "blog.html",
     "title": "E155 Blog",
     "section": "",
-    "text": "Lab 2: Multiplexed 7-Segment Display\n\n\n\n\n\n\n\n\nSep 10, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 1: FPGA and MCU Setup and Testing\n\n\n\n\n\n\n\n\nAug 27, 2025\n\n\nDiego Weiss\n\n\n\n\n\nNo matching items"
+    "text": "Lab 3: Keypad Scanner\n\n\n\n\n\n\n\n\nSep 17, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2: Multiplexed 7-Segment Display\n\n\n\n\n\n\n\n\nSep 10, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 1: FPGA and MCU Setup and Testing\n\n\n\n\n\n\n\n\nAug 27, 2025\n\n\nDiego Weiss\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
