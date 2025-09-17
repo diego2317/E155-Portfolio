@@ -2,7 +2,7 @@
 title: "Lab 3: Keypad Scanner"
 description: ""
 author: "Diego Weiss"
-date: "9/15/25"
+date: "9/17/25"
 categories:
   - reflection
   - labreport
