@@ -47,7 +47,9 @@ I consulted the [datasheet](https://www.alldatasheet.com/datasheet-pdf/view/1307
 
 ![Schematic](/images/lab1/lab1schematic_new.png)
 
-In order to keep the current draw for each segment within recommended operating conditions, I used some Ohm's law calculations. The datasheet of the HDSP-511A display recommends a maximum forward current of 15 mA. Since the FPGA supplies 3.3V, I chose 390 Ohm resistors, which result in a current of ~8.5mA.
+In order to keep the current draw for each segment within recommended operating conditions, I used some Ohm's law calculations. The datasheet of the HDSP-511A display recommends a maximum forward current of 15 mA. It also notes that the LEDs have a typical forward voltage of 2.0V. In order to calculate the current across the LED, I used Ohm's law with $\Delta V = 3.3 - 2.0$ because the pins of the FPGA output 3.3V. Then, choosing 390 Ohm resistors (because they were the only ones available) results in a current of ~3.3mA across the LEDs, as seen below:
+$$\frac{3.3V-2.0V}{390 \Omega} \approx 3.3 mA$$
+This current proved acceptable, as all segments of the display would light up with the same brightness, regardless of how many segments were illuminated.
 
 ## Results and Discussion
 
