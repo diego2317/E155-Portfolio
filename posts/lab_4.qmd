@@ -6,7 +6,7 @@ date: "10/5/25"
 categories:
   - reflection
   - labreport
-draft: true
+draft: false
 ---
 
 ## Introduction
@@ -38,7 +38,7 @@ With these formulas, the initial clock value of 80 Mhz, and the range for the au
 
 In order to determine the minimum and maximum delay, I performed similar calculations. I used a prescaler of 1999 and configured timer 15 for my delays. The maximum duration produced given this prescaler value and the 80Mhz system clock should be 1.64 seconds (when the auto-reload value is 65535). The minimum duration produced given this prescaler value and the 80Mhz system clock should be 0.025 milliseconds (when the auto-reload value is 0).
 ## Conclusion
-The design fulfilled all the requirements, playing both Fur Elise and Coconut Mall. I spent 9 hours on this lab.
+The design fulfilled all the requirements, playing both Fur Elise and hot cross buns. I spent 9 hours on this lab.
 
 ## AI Prototype
 
