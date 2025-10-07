@@ -1,5 +1,33 @@
 [
   {
+    "objectID": "posts/lab_4.html",
+    "href": "posts/lab_4.html",
+    "title": "Lab 4: Digital Audio",
+    "section": "",
+    "text": "The goal of this lab was to use our STM32 MCUs to play music by toggling a GPIO pin using timers at a specific frequency for specific durations. From a technical standpoint, the goal of this lab was to gain confidence reading the datasheet and writing device drivers."
+  },
+  {
+    "objectID": "posts/lab_4.html#introduction",
+    "href": "posts/lab_4.html#introduction",
+    "title": "Lab 4: Digital Audio",
+    "section": "",
+    "text": "The goal of this lab was to use our STM32 MCUs to play music by toggling a GPIO pin using timers at a specific frequency for specific durations. From a technical standpoint, the goal of this lab was to gain confidence reading the datasheet and writing device drivers."
+  },
+  {
+    "objectID": "posts/lab_4.html#technical-documentation",
+    "href": "posts/lab_4.html#technical-documentation",
+    "title": "Lab 4: Digital Audio",
+    "section": "Technical Documentation",
+    "text": "Technical Documentation\nAs always, all the code for this lab can be found in the lab 4 folder of my Github repository for E155.\n\nCircuitry\nI consulted the datasheet of the LM386N-4 audio op-amp to design my circuit. It features a potentiometer for volume control, and the LM386N-4 ensures the current draw on the microcontroller stays at acceptable levels.\n\n\n\nCircuit\n\n\n\n\nTiming\nI used the Timer 15 and Timer 16 registers to output a square wave from the microcontroller. By configuring the timers in PWM mode and connecting them to a GPIO Pin, I was able to use the timers to drive a square wave output. I used the phase-locked loop to clock the microcontroller at 80Mhz. I used a prescaler value of 999 for timer 16. By configuring my auto-reload value to be 16 bits, the minimum and maximum frequency supported by my clock can be determined by setting the auto-reload value to 0 and 65536 respectively. I used the following formulas to do my calculations: \\[f_{cnt} = \\frac{f_{clk}}{PSC + 1}\\] \\[\\frac{1}{f_{sound}} = \\frac{1}{f_{cnt}} \\cdot \\text{cycles}\\] \\[\\text{cycles} = \\frac{f_{clk}}{f_{sound} \\cdot (PSC + 1)}\\] \\[f_{sound} = \\frac{f_{clk}}{\\text{cycles} \\cdot (PSC + 1)}\\]\nWith these formulas, the initial clock value of 80 Mhz, and the range for the auto-reload value of 0 to 65536, a minimum frequency of 1.22Hz (when the auto-reload is 65536) and a maximum frequency of 80 kHz (when the auto-reload is 0) can be determined. To ensure that individual pitches are accurate to within 1% across the frequency range of 220-1000 Hz, I did some calculations in google sheets, which can be seen below.\n\n\n\nFrequency Calculations\n\n\nIn order to determine the minimum and maximum delay, I performed similar calculations. I used a prescaler of 1999 and configured timer 15 for my delays. The maximum duration produced given this prescaler value and the 80Mhz system clock should be 1.64 seconds (when the auto-reload value is 65535). The minimum duration produced given this prescaler value and the 80Mhz system clock should be 0.025 milliseconds (when the auto-reload value is 0). ## Conclusion The design fulfilled all the requirements, playing both Fur Elise and hot cross buns. I spent 9 hours on this lab."
+  },
+  {
+    "objectID": "posts/lab_4.html#ai-prototype",
+    "href": "posts/lab_4.html#ai-prototype",
+    "title": "Lab 4: Digital Audio",
+    "section": "AI Prototype",
+    "text": "AI Prototype\nI began by giving ChatGPT 5 the following prompt:\n\n\n\n\n\n\nNote\n\n\n\nWhat timers should I use on the STM32L432KC to generate frequencies ranging from 220Hz to 1kHz? What’s the best choice of timer if I want to easily connect it to a GPIO pin? What formulae are relevant, and what registers need to be set to configure them properly?\n\n\nThe full chat output produced by GPT5 can be seen at this link. Notably, GPT5 gave me formulas for determining PWM frequency and OC toggle frequency. It also gave me instructions for picking PSC/ARR, and told me to fix PSC and vary ARR across my range. It gave me instructions to configure the AHB2ENR and APB1ENR1 registers for the RCC, the MODER and AFR[0/1] reigsters for GPIO, and the CR1, PSC, and ARR registers for TIMx (x being whichever TIM I chose). These were not the registers I used to configure the RCC, and I didn’t touch the AFR[0/1] registers, but the rest of the advice was sound. It also gave me what amounts to pseudocode for the main method, which could be useful."
+  },
+  {
     "objectID": "posts/lab_2.html",
     "href": "posts/lab_2.html",
     "title": "Lab 2: Multiplexed 7-Segment Display",
@@ -46,7 +74,7 @@
     "href": "blog.html",
     "title": "E155 Blog",
     "section": "",
-    "text": "Lab 3: Keypad Scanner\n\n\n\n\n\n\n\n\nSep 17, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2: Multiplexed 7-Segment Display\n\n\n\n\n\n\n\n\nSep 10, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 1: FPGA and MCU Setup and Testing\n\n\n\n\n\n\n\n\nAug 27, 2025\n\n\nDiego Weiss\n\n\n\n\n\nNo matching items"
+    "text": "Lab 4: Digital Audio\n\n\n\n\n\n\n\n\nOct 5, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3: Keypad Scanner\n\n\n\n\n\n\n\n\nSep 17, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2: Multiplexed 7-Segment Display\n\n\n\n\n\n\n\n\nSep 10, 2025\n\n\nDiego Weiss\n\n\n\n\n\n\n\n\n\n\n\n\nLab 1: FPGA and MCU Setup and Testing\n\n\n\n\n\n\n\n\nAug 27, 2025\n\n\nDiego Weiss\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/lab_1.html",
