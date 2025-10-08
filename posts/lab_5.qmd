@@ -1,0 +1,13 @@
+---
+title: "Lab 5: Interrupts"
+description: ""
+author: "Diego Weiss"
+date: "10/7/25"
+categories:
+  - reflection
+  - labreport
+draft: false
+---
+
+## Introduction
+The goal of this lab was to 
