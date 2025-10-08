@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Diego Weiss">
-<meta name="dcterms.date" content="2025-10-05">
+<meta name="dcterms.date" content="2025-10-07">
 
-<title>Lab 4: Digital Audio – E155 Portfolio</title>
+<title>Lab 5: Interrupts – E155 Portfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -70,35 +70,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -145,13 +116,6 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#technical-documentation" id="toc-technical-documentation" class="nav-link" data-scroll-target="#technical-documentation">Technical Documentation</a>
-  <ul class="collapse">
-  <li><a href="#circuitry" id="toc-circuitry" class="nav-link" data-scroll-target="#circuitry">Circuitry</a></li>
-  <li><a href="#timing" id="toc-timing" class="nav-link" data-scroll-target="#timing">Timing</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#ai-prototype" id="toc-ai-prototype" class="nav-link" data-scroll-target="#ai-prototype">AI Prototype</a></li>
   </ul>
 </nav>
     </div>
@@ -160,7 +124,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lab 4: Digital Audio</h1>
+<h1 class="title">Lab 5: Interrupts</h1>
   <div class="quarto-categories">
     <div class="quarto-category">reflection</div>
     <div class="quarto-category">labreport</div>
@@ -181,7 +145,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 5, 2025</p>
+      <p class="date">October 7, 2025</p>
     </div>
   </div>
   
@@ -195,55 +159,7 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The goal of this lab was to use our STM32 MCUs to play music by toggling a GPIO pin using timers at a specific frequency for specific durations. From a technical standpoint, the goal of this lab was to gain confidence reading the datasheet and writing device drivers.</p>
-</section>
-<section id="technical-documentation" class="level2">
-<h2 class="anchored" data-anchor-id="technical-documentation">Technical Documentation</h2>
-<p>As always, all the code for this lab can be found in the lab 4 folder of my <a href="https://github.com/diego2317/E155">Github repository for E155</a>.</p>
-<section id="circuitry" class="level3">
-<h3 class="anchored" data-anchor-id="circuitry">Circuitry</h3>
-<p>I consulted the <a href="https://www.ti.com/lit/ds/symlink/lm386.pdf?ts=1759688431008&amp;ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FLM386%252Fpart-details%252FLM386N-4%252FNOPB">datasheet</a> of the LM386N-4 audio op-amp to design my circuit. It features a potentiometer for volume control, and the LM386N-4 ensures the current draw on the microcontroller stays at acceptable levels.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="..\images/lab4/schematic.png" class="img-fluid figure-img"></p>
-<figcaption>Circuit</figcaption>
-</figure>
-</div>
-</section>
-<section id="timing" class="level3">
-<h3 class="anchored" data-anchor-id="timing">Timing</h3>
-<p>I used the Timer 15 and Timer 16 registers to output a square wave from the microcontroller. By configuring the timers in PWM mode and connecting them to a GPIO Pin, I was able to use the timers to drive a square wave output. I used the phase-locked loop to clock the microcontroller at 80Mhz. I used a prescaler value of 999 for timer 16. By configuring my auto-reload value to be 16 bits, the minimum and maximum frequency supported by my clock can be determined by setting the auto-reload value to 0 and 65536 respectively. I used the following formulas to do my calculations: <span class="math display">\[f_{cnt} = \frac{f_{clk}}{PSC + 1}\]</span> <span class="math display">\[\frac{1}{f_{sound}} = \frac{1}{f_{cnt}} \cdot \text{cycles}\]</span> <span class="math display">\[\text{cycles} = \frac{f_{clk}}{f_{sound} \cdot (PSC + 1)}\]</span> <span class="math display">\[f_{sound} = \frac{f_{clk}}{\text{cycles} \cdot (PSC + 1)}\]</span></p>
-<p>With these formulas, the initial clock value of 80 Mhz, and the range for the auto-reload value of 0 to 65536, a minimum frequency of 1.22Hz (when the auto-reload is 65536) and a maximum frequency of 80 kHz (when the auto-reload is 0) can be determined. To ensure that individual pitches are accurate to within 1% across the frequency range of 220-1000 Hz, I did some calculations in google sheets, which can be seen below.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="..\images/lab4/frequency_table.png" class="img-fluid figure-img"></p>
-<figcaption>Frequency Calculations</figcaption>
-</figure>
-</div>
-<p>In order to determine the minimum and maximum delay, I performed similar calculations. I used a prescaler of 1999 and configured timer 15 for my delays. The maximum duration produced given this prescaler value and the 80Mhz system clock should be 1.64 seconds (when the auto-reload value is 65535). The minimum duration produced given this prescaler value and the 80Mhz system clock should be 0.025 milliseconds (when the auto-reload value is 0).</p>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>The design fulfilled all the requirements, playing both Fur Elise and hot cross buns. I spent 9 hours on this lab.</p>
-</section>
-<section id="ai-prototype" class="level2">
-<h2 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h2>
-<p>I began by giving ChatGPT 5 the following prompt:</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What timers should I use on the STM32L432KC to generate frequencies ranging from 220Hz to 1kHz? What’s the best choice of timer if I want to easily connect it to a GPIO pin? What formulae are relevant, and what registers need to be set to configure them properly?</p>
-</div>
-</div>
-<p>The full chat output produced by GPT5 can be seen at this <a href="https://chatgpt.com/share/68dee95d-a55c-8012-a4eb-f0e61d6eefc9">link</a>. Notably, GPT5 gave me formulas for determining PWM frequency and OC toggle frequency. It also gave me instructions for picking PSC/ARR, and told me to fix PSC and vary ARR across my range. It gave me instructions to configure the AHB2ENR and APB1ENR1 registers for the RCC, the MODER and AFR[0/1] reigsters for GPIO, and the CR1, PSC, and ARR registers for TIMx (x being whichever TIM I chose). These were not the registers I used to configure the RCC, and I didn’t touch the AFR[0/1] registers, but the rest of the advice was sound. It also gave me what amounts to pseudocode for the main method, which could be useful.</p>
+<p>The goal of this lab was to</p>
 
 
 </section>
