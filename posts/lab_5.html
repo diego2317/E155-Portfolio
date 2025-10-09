@@ -70,6 +70,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -116,6 +145,20 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#design" id="toc-design" class="nav-link" data-scroll-target="#design">Design</a>
+  <ul class="collapse">
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#schematic" id="toc-schematic" class="nav-link" data-scroll-target="#schematic">Schematic</a></li>
+  <li><a href="#isr-design" id="toc-isr-design" class="nav-link" data-scroll-target="#isr-design">ISR Design</a></li>
+  <li><a href="#motor-speed-calculation" id="toc-motor-speed-calculation" class="nav-link" data-scroll-target="#motor-speed-calculation">Motor Speed Calculation</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+  <ul class="collapse">
+  <li><a href="#performance-verification" id="toc-performance-verification" class="nav-link" data-scroll-target="#performance-verification">Performance Verification</a></li>
+  </ul></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#ai-prototype" id="toc-ai-prototype" class="nav-link" data-scroll-target="#ai-prototype">AI Prototype</a></li>
   </ul>
 </nav>
     </div>
@@ -159,7 +202,135 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The goal of this lab was to</p>
+<p>The goal of this lab was to develop experience with interrupts by using them on our MCU to determine the speed of a motor by reading from a quadrature encoder. As always, the code for this lab can be found in the lab 5 folder of my <a href="https://github.com/diego2317/E155">Github repository for E155</a>.</p>
+</section>
+<section id="design" class="level2">
+<h2 class="anchored" data-anchor-id="design">Design</h2>
+<section id="background" class="level3">
+<h3 class="anchored" data-anchor-id="background">Background</h3>
+<p>Quadrature encoders work by using two sensors that are 90 degrees out of phase on a patterned disk to determine how fast the disk rotates. The outputs of these sensors also allow us to determine the direction in which the motor is spinning. We were provided with the information that the motor has a pulses-per-rotation (PPR) of 408. The core of the design is a set of interrupts and handlers that read from the encoder and update a global variable to store the number of ‘ticks’. I also kept track of the previous and current state of the encoder in order to determine the direction it was spinning in, which determined whether tick count was incremented or decremented.</p>
+</section>
+<section id="schematic" class="level3">
+<h3 class="anchored" data-anchor-id="schematic">Schematic</h3>
+<p>The schematic for this lab was very simple, as the motor could be connected directly to the MCU so long as the encoders were connected to 5V tolerant pins. It was for that reason that I connected the encoders to PA6 and PA8, as those were listed as 5V tolerant by the datasheet.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/lab5/schematBUTT.png" class="img-fluid figure-img"></p>
+<figcaption>Schematic</figcaption>
+</figure>
+</div>
+</section>
+<section id="isr-design" class="level3">
+<h3 class="anchored" data-anchor-id="isr-design">ISR Design</h3>
+<p>I designed an Interrupt Service Routine (ISR) to determine the behavior of the MCU when an interrupt is triggered. When an interrupt is triggered by a falling or rising edge of either encoder, the EXTI ISR does the following:</p>
+<ol type="1">
+<li>Clears the interrupt</li>
+<li>Reads the current state</li>
+<li>Updates a counter for the number of pulses</li>
+<li>Stores the current state in a static variable for previous state</li>
+<li>Returns to the program</li>
+</ol>
+<p>A flow chart can be seen below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/lab5/flowBUTT.png" class="img-fluid figure-img"></p>
+<figcaption>flowchart</figcaption>
+</figure>
+</div>
+<p>I also used the SysTick interrupt to handle computing the revolutions per second and print the value to the terminal every 0.25s. A description of the SysTick ISR can be seen in the flowchart above.</p>
+</section>
+<section id="motor-speed-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="motor-speed-calculation">Motor Speed Calculation</h3>
+<p>In order to calculate the speed of the motor, I stored the number of quadrature pulses in a variable called <code>pulse_count</code>. The inputs <code>a</code> and <code>b</code> were taken and used to form a 2-bit value <code>curr_AB</code>, giving values 0-3 for the four valid quadrature states. I stored the previous state in <code>last_AB</code>. By storing the previous state, I enabled my code to determine the transition direction. I then combined the previous and current states into a 4-bit number to represent one of 16 possible transitions. Using a lookup table, I mapped each transition to a forward pulse, reverse pulse, or invalid transition (no motion). So, <code>pulse_count</code> would increment or decrement depending on direction. This <code>pulse_count</code> value would then used in <code>calculateRPS()</code>, which would be called every 250ms. The formula I used for calculated the revolutions per second is as follows:</p>
+<p><span class="math display">\[\text{rps} = \frac{\text{pulse count}}{PPR \cdot 4}\]</span></p>
+<p>Where PPR = 408 pulses per revolution.</p>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<section id="performance-verification" class="level3">
+<h3 class="anchored" data-anchor-id="performance-verification">Performance Verification</h3>
+<p>To verify I was reading correct values for the rotations/second of the motor, I measured the outputs of the quadrature encoder using an oscilloscope and calculated the motor’s actual angular rate. The oscilloscope would give me the frequency of the pulses from the quadrature encoder, which can be converted to a rotations/second value through the following equation:</p>
+<p><span class="math display">\[\frac{r}{s} = \frac{f}{PPR}\]</span></p>
+<p>Where PPR = 408. #### -10V Input My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I confirmed the direction visually, as the motor was spinning clockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/lab5/-10V.png" class="img-fluid figure-img"></p>
+<figcaption>-10V Oscilloscope</figcaption>
+</figure>
+</div>
+<p>Using the pulse frequency of 984Hz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 2.41 rotations/second.</p>
+<section id="v-input" class="level4">
+<h4 class="anchored" data-anchor-id="v-input">+15V Input</h4>
+<p>My program reported a motor speed of -3.63 rev/s when I gave the motor +15V. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/lab5/BUTT.png" class="img-fluid figure-img"></p>
+<figcaption>15V Oscilloscope</figcaption>
+</figure>
+</div>
+<p>Using the pulse frequency of 1.481KHz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 3.63 rotations/second.</p>
+</section>
+<section id="v-input-1" class="level4">
+<h4 class="anchored" data-anchor-id="v-input-1">+5V Input</h4>
+<p>My program reported a motor speed of -1.14 rev/s when I gave the motor +5V from the MCU. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="..\images/lab5/5BUTT.png" class="img-fluid figure-img"></p>
+<figcaption>5V Oscilloscope</figcaption>
+</figure>
+</div>
+<p>Using the pulse frequency of 463Hz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 1.13 rotations/second.</p>
+</section>
+</section>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<p>An alternative approach to designing the system in this lab would be timer-based polling. In order to compare the performance of interrupt vs polling-based approaches, let us consider the following. Define:</p>
+<ul>
+<li>Let <span class="math inline">\(\Omega\)</span> be shaft speed in rev/s</li>
+<li>Let each encoder channel is a square wave with frequency <span class="math inline">\(f\)</span>. The channels have equivalent frequencies</li>
+<li>For the sake of this exercise, let us assume that the square wave produced always has the same frequency <span class="math inline">\(f\)</span>, with no random increases or decreases in <span class="math inline">\(f\)</span>.</li>
+<li>Let each encoder channel be spaced by 90 degrees with time spacing <span class="math inline">\(\Delta\)</span>. Notice that as <span class="math inline">\(f\)</span> increases, <span class="math inline">\(\Delta\)</span> decreases</li>
+<li>Let the encoder’s counts per revolution (CPR) be four times the motor’s revolution, as we’re tracking every edge</li>
+<li>Let <span class="math inline">\(C\)</span> be the worst-case execution time for the ISR</li>
+<li>Let <span class="math inline">\(T_{Poll}\)</span> be the worst-case execution time for the polling + loop body</li>
+</ul>
+<p>Assume the constraint that the interrupt and polling-based approaches cannot miss a single edge from the quadrature encoder. Define encoder signal period <span class="math inline">\(T\)</span> = 1/<span class="math inline">\(f\)</span>. Since the edges are 90 degrees apart, we see the following:</p>
+<p><span class="math display">\[\Delta = \frac{T}{4} = \frac{1}{4 \cdot f} = \frac{1}{4 \cdot \frac{\text{CPR}}{4} \cdot \Omega} = \frac{1}{\text{CPR} \cdot \Omega}\]</span></p>
+<p>Equivalently, we have an edge rate <span class="math inline">\(\lambda\)</span></p>
+<p><span class="math display">\[\lambda = \frac{1}{\Delta} = \text{CPR} \cdot \Omega\]</span></p>
+<p>Since we have all four edges on one EXTI line, we need to make sure we clear the previous edge before the next one arrives. Otherwise, multiple edges coalesce and we lose an edge. So, we can define our hard bound on worst-case ISR time <span class="math inline">\(C\)</span> as</p>
+<p><span class="math display">\[C &lt; \Delta\]</span></p>
+<p>In turn, this tells us the maximum RPS the system can measure is without missing any edges for an arbitrary ISR execution time <span class="math inline">\(C_a\)</span></p>
+<p><span class="math display">\[\text{RPS} &lt; \frac{1}{\text{CPR} \cdot C_a}\]</span></p>
+<p>Using a polling model, to not miss edges and get correct state transitions, we need <span class="math inline">\(T_{Poll}\)</span> &lt; <span class="math inline">\(\Delta\)</span>, where <span class="math inline">\(T_{Poll}\)</span> is our polling period. Also, loop body cycles have to fit within <span class="math inline">\(T_{poll}\)</span>. In practice, we’d want to ensure that <span class="math inline">\(T_{Poll} &lt; \Delta / 2\)</span>. But let’s assume we magically optimize our loop body to use the exact amount of clock cycles in <span class="math inline">\(T_{Poll}\)</span>. Then, we can see that for an arbitrary poll + loop execution time <span class="math inline">\(T_{a}\)</span>, the maximum RPS the system can measure without missing any edges is</p>
+<p><span class="math display">\[\text{RPS} &lt; \frac{1}{\text{CPR} \cdot T_{a}}\]</span></p>
+<p>Now, assume that <span class="math inline">\(C\)</span> and <span class="math inline">\(T_{Poll}\)</span> are perfectly optimized such that the number of clock cycles required cannot be decreased without losing system functionality. We see that as <span class="math inline">\(C\)</span> and <span class="math inline">\(T_{Poll}\)</span> decrease, the maximum RPS that the system can measure increases. Therefore, the most performant system at high frequencies is the system that uses the least number of clock cycles to maintain system functionality.</p>
+<p>This was a fun exercise, but it doesn’t consider key aspects of interrupt vs polling-based approaches. There exist advantages to interrupt-based approaches. Interrupt-based routines are more efficent than polling-based approaches, as they allow the MCU to execute other tasks while waiting for the encoder to trigger an interrupt. Also, interrupts can capture the exact moment the encoder changes state. Furthermore, according to <a href="https://users.ece.utexas.edu/~valvano/Volume1/E-Book/C12_Interrupts.htm">Valvano and Yerraballi</a>, <span class="math inline">\(C &lt;&lt; T_{Poll}\)</span> in practice, as ISRs are typically far smaller than any functional polling loop. So, this supports the use of interrupt-based routines for high-frequency edge latching.</p>
+<p>As a note, there are other approaches to acquiring digital data at high frequencies. For performance-critical systems at very high frequencies, timer input capture or dynamic memory allocation (DMA) can be used to latch every edge in hardware. FPGAs are also better at this than MCUs!</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>I spent 11 hours on this lab.</p>
+</section>
+<section id="ai-prototype" class="level2">
+<h2 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h2>
+<p>I began by giving ChatGPT 5 the following prompt:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write me interrupt handlers to interface with a quadrature encoder. I’m using the STM32L432KC, what pins should I connect the encoder to in order to allow it to easily trigger the interrupts?</p>
+</div>
+</div>
+<p>GPT5 recommended that I use a hardware timer in encoder mode instead of reading GPIO pins, which I found interesting. It suggested configuring TIM2 such that an over/underflow would cause an interrupt. It also provided the approach I used, but suggested it was a less preferable option.</p>
 
 
 </section>
