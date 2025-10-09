@@ -10,4 +10,123 @@ draft: false
 ---
 
 ## Introduction
-The goal of this lab was to 
+The goal of this lab was to develop experience with interrupts by using them on our MCU to determine the speed of a motor by reading from a quadrature encoder. As always, the code for this lab can be found in the lab 5 folder of my [Github repository for E155](https://github.com/diego2317/E155).
+
+## Design
+
+### Background
+Quadrature encoders work by using two sensors that are 90 degrees out of phase on a patterned disk to determine how fast the disk rotates. The outputs of these sensors also allow us to determine the direction in which the motor is spinning. We were provided with the information that the motor has a pulses-per-rotation (PPR) of 408. The core of the design is a set of interrupts and handlers that read from the encoder and update a global variable to store the number of 'ticks'. I also kept track of the previous and current state of the encoder in order to determine the direction it was spinning in, which determined whether tick count was incremented or decremented.
+
+### Schematic
+
+The schematic for this lab was very simple, as the motor could be connected directly to the MCU so long as the encoders were connected to 5V tolerant pins. It was for that reason that I connected the encoders to PA6 and PA8, as those were listed as 5V tolerant by the datasheet.
+
+![Schematic](/images/lab5/schematBUTT.png)
+
+### ISR Design
+I designed an Interrupt Service Routine (ISR) to determine the behavior of the MCU when an interrupt is triggered. When an interrupt is triggered by a falling or rising edge of either encoder, the EXTI ISR does the following:
+
+1. Clears the interrupt 
+2. Reads the current state
+3. Updates a counter for the number of pulses
+4. Stores the current state in a static variable for previous state
+5. Returns to the program
+
+A flow chart can be seen below:
+
+![flowchart](/images/lab5/flowBUTT.png)
+
+I also used the SysTick interrupt to handle computing the revolutions per second and print the value to the terminal every 0.25s. A description of the SysTick ISR can be seen in the flowchart above.
+
+### Motor Speed Calculation
+
+In order to calculate the speed of the motor, I stored the number of quadrature pulses in a variable called `pulse_count`. The inputs `a` and `b` were taken and used to form a 2-bit value `curr_AB`, giving values 0-3 for the four valid quadrature states. I stored the previous state in `last_AB`. By storing the previous state, I enabled my code to determine the transition direction. I then combined the previous and current states into a 4-bit number to represent one of 16 possible transitions. Using a lookup table, I mapped each transition to a forward pulse, reverse pulse, or invalid transition (no motion). So, `pulse_count` would increment or decrement depending on direction. This `pulse_count` value would then used in `calculateRPS()`, which would be called every 250ms. The formula I used for calculated the revolutions per second is as follows:
+
+$$\text{rps} = \frac{\text{pulse count}}{PPR \cdot 4}$$
+
+Where PPR = 408 pulses per revolution.
+
+## Results
+
+### Performance Verification
+
+To verify I was reading correct values for the rotations/second of the motor, I measured the outputs of the quadrature encoder using an oscilloscope and calculated the motor's actual angular rate. The oscilloscope would give me the frequency of the pulses from the quadrature encoder, which can be converted to a rotations/second value through the following equation:
+
+$$\frac{r}{s} = \frac{f}{PPR}$$
+
+Where PPR = 408.
+#### -10V Input
+My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I confirmed the direction visually, as the motor was spinning clockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.
+
+![-10V Oscilloscope](/images/lab5/-10V.png)
+
+Using the pulse frequency of 984Hz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 2.41 rotations/second.
+
+#### +15V Input
+My program reported a motor speed of -3.63 rev/s when I gave the motor +15V. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.
+
+![15V Oscilloscope](/images/lab5/BUTT.png)
+
+Using the pulse frequency of 1.481KHz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 3.63 rotations/second.
+
+#### +5V Input
+My program reported a motor speed of -1.14 rev/s when I gave the motor +5V from the MCU. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.
+
+![5V Oscilloscope](/images/lab5/5BUTT.png)
+
+Using the pulse frequency of 463Hz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 1.13 rotations/second.
+
+## Analysis
+
+An alternative approach to designing the system in this lab would be timer-based polling. In order to compare the performance of interrupt vs polling-based approaches, let us consider the following. Define:
+
+- Let $\Omega$ be shaft speed in rev/s
+- Let each encoder channel is a square wave with frequency $f$. The channels have equivalent frequencies
+- For the sake of this exercise, let us assume that the square wave produced always has the same frequency $f$, with no random increases or decreases in $f$.
+- Let each encoder channel be spaced by 90 degrees with time spacing $\Delta$. Notice that as $f$ increases, $\Delta$ decreases
+- Let the encoder's counts per revolution (CPR) be four times the motor's revolution, as we're tracking every edge
+- Let $C$ be the worst-case execution time for the ISR
+- Let $T_{Poll}$ be the worst-case execution time for the polling + loop body
+
+Assume the constraint that the interrupt and polling-based approaches cannot miss a single edge from the quadrature encoder. Define encoder signal period $T$ = 1/$f$. Since the edges are 90 degrees apart, we see the following:
+
+$$\Delta = \frac{T}{4} = \frac{1}{4 \cdot f} = \frac{1}{4 \cdot \frac{\text{CPR}}{4} \cdot \Omega} = \frac{1}{\text{CPR} \cdot \Omega}$$
+
+Equivalently, we have an edge rate $\lambda$
+
+$$\lambda = \frac{1}{\Delta} = \text{CPR} \cdot \Omega$$
+
+Since we have all four edges on one EXTI line, we need to make sure we clear the previous edge before the next one arrives. Otherwise, multiple edges coalesce and we lose an edge. So, we can define our hard bound on worst-case ISR time $C$ as
+
+$$C < \Delta$$
+
+In turn, this tells us the maximum RPS the system can measure is without missing any edges for an arbitrary ISR execution time $C_a$
+
+$$\text{RPS} < \frac{1}{\text{CPR} \cdot C_a}$$
+
+Using a polling model, to not miss edges and get correct state transitions, we need $T_{Poll}$ < $\Delta$, where $T_{Poll}$ is our polling period. Also, loop body cycles have to fit within $T_{poll}$. In practice, we'd want to ensure that $T_{Poll} < \Delta / 2$. But let's assume we magically optimize our loop body to use the exact amount of clock cycles in $T_{Poll}$. Then, we can see that for an arbitrary poll + loop execution time $T_{a}$, the maximum RPS the system can measure without missing any edges is
+
+$$\text{RPS} < \frac{1}{\text{CPR} \cdot T_{a}}$$
+
+Now, assume that $C$ and $T_{Poll}$ are perfectly optimized such that the number of clock cycles required cannot be decreased without losing system functionality. We see that as $C$ and $T_{Poll}$ decrease, the maximum RPS that the system can measure increases. Therefore, the most performant system at high frequencies is the system that uses the least number of clock cycles to maintain system functionality.
+
+This was a fun exercise, but it doesn't consider key aspects of interrupt vs polling-based approaches. There exist advantages to interrupt-based approaches. Interrupt-based routines are more efficent than polling-based approaches, as they allow the MCU to execute other tasks while waiting for the encoder to trigger an interrupt. Also, interrupts can capture the exact moment the encoder changes state. Furthermore, according to [Valvano and Yerraballi](https://users.ece.utexas.edu/~valvano/Volume1/E-Book/C12_Interrupts.htm), $C << T_{Poll}$ in practice, as ISRs are typically far smaller than any functional polling loop. So, this supports the use of interrupt-based routines for high-frequency edge latching. 
+
+As a note, there are other approaches to acquiring digital data at high frequencies. For performance-critical systems at very high frequencies, timer input capture or dynamic memory allocation (DMA) can be used to latch every edge in hardware. FPGAs are also better at this than MCUs!
+
+
+## Conclusion
+
+I spent 11 hours on this lab.
+
+## AI Prototype
+
+I began by giving ChatGPT 5 the following prompt:
+
+::: callout-note
+
+Write me interrupt handlers to interface with a quadrature encoder. I’m using the STM32L432KC, what pins should I connect the encoder to in order to allow it to easily trigger the interrupts?
+
+:::
+
+GPT5 recommended that I use a hardware timer in encoder mode instead of reading GPIO pins, which I found interesting. It suggested configuring TIM2 such that an over/underflow would cause an interrupt. It also provided the approach I used, but suggested it was a less preferable option.
