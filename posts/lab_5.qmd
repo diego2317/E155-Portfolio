@@ -55,7 +55,9 @@ To verify I was reading correct values for the rotations/second of the motor, I 
 $$\frac{r}{s} = \frac{f}{PPR}$$
 
 Where PPR = 408.
+
 #### -10V Input
+
 My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I confirmed the direction visually, as the motor was spinning clockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.
 
 ![-10V Oscilloscope](/images/lab5/-10V.png)
@@ -63,6 +65,7 @@ My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I c
 Using the pulse frequency of 984Hz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 2.41 rotations/second.
 
 #### +15V Input
+
 My program reported a motor speed of -3.63 rev/s when I gave the motor +15V. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.
 
 ![15V Oscilloscope](/images/lab5/BUTT.png)
@@ -70,6 +73,7 @@ My program reported a motor speed of -3.63 rev/s when I gave the motor +15V. I c
 Using the pulse frequency of 1.481KHz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 3.63 rotations/second.
 
 #### +5V Input
+
 My program reported a motor speed of -1.14 rev/s when I gave the motor +5V from the MCU. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.
 
 ![5V Oscilloscope](/images/lab5/5BUTT.png)
@@ -129,4 +133,4 @@ Write me interrupt handlers to interface with a quadrature encoder. I’m using 
 
 :::
 
-GPT5 recommended that I use a hardware timer in encoder mode instead of reading GPIO pins, which I found interesting. It suggested configuring TIM2 such that an over/underflow would cause an interrupt. It also provided the approach I used, but suggested it was a less preferable option.
+GPT5 recommended that I use a hardware timer in encoder mode instead of reading GPIO pins, which I found interesting. It suggested configuring TIM2 such that an over/underflow would cause an interrupt. It also provided the approach I used, but suggested it was a less preferable option. I didn't find the LLM's advice particularly useful.
