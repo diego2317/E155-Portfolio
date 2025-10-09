@@ -116,6 +116,8 @@ Now, assume that $C$ and $T_{Poll}$ are perfectly optimized such that the number
 
 This was a fun exercise, but it doesn't consider key aspects of interrupt vs polling-based approaches. There exist advantages to interrupt-based approaches. Interrupt-based routines are more efficent than polling-based approaches, as they allow the MCU to execute other tasks while waiting for the encoder to trigger an interrupt. Also, interrupts can capture the exact moment the encoder changes state. Furthermore, according to [Valvano and Yerraballi](https://users.ece.utexas.edu/~valvano/Volume1/E-Book/C12_Interrupts.htm), $C << T_{Poll}$ in practice, as ISRs are typically far smaller than any functional polling loop. So, this supports the use of interrupt-based routines for high-frequency edge latching. 
 
+I found that my main loop runs at approximately 17.5 KHz via oscilloscope analysis.
+
 As a note, there are other approaches to acquiring digital data at high frequencies. For performance-critical systems at very high frequencies, timer input capture or dynamic memory allocation (DMA) can be used to latch every edge in hardware. FPGAs are also better at this than MCUs!
 
 
