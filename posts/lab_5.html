@@ -252,7 +252,10 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="performance-verification">Performance Verification</h3>
 <p>To verify I was reading correct values for the rotations/second of the motor, I measured the outputs of the quadrature encoder using an oscilloscope and calculated the motor’s actual angular rate. The oscilloscope would give me the frequency of the pulses from the quadrature encoder, which can be converted to a rotations/second value through the following equation:</p>
 <p><span class="math display">\[\frac{r}{s} = \frac{f}{PPR}\]</span></p>
-<p>Where PPR = 408. #### -10V Input My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I confirmed the direction visually, as the motor was spinning clockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
+<p>Where PPR = 408.</p>
+<section id="v-input" class="level4">
+<h4 class="anchored" data-anchor-id="v-input">-10V Input</h4>
+<p>My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I confirmed the direction visually, as the motor was spinning clockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="..\images/lab5/-10V.png" class="img-fluid figure-img"></p>
@@ -260,8 +263,9 @@ window.Quarto = {
 </figure>
 </div>
 <p>Using the pulse frequency of 984Hz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 2.41 rotations/second.</p>
-<section id="v-input" class="level4">
-<h4 class="anchored" data-anchor-id="v-input">+15V Input</h4>
+</section>
+<section id="v-input-1" class="level4">
+<h4 class="anchored" data-anchor-id="v-input-1">+15V Input</h4>
 <p>My program reported a motor speed of -3.63 rev/s when I gave the motor +15V. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -271,8 +275,8 @@ window.Quarto = {
 </div>
 <p>Using the pulse frequency of 1.481KHz (from the image) and the aforementioned equation for rotations/second, I found that actual revolutions/second of the motor to be 3.63 rotations/second.</p>
 </section>
-<section id="v-input-1" class="level4">
-<h4 class="anchored" data-anchor-id="v-input-1">+5V Input</h4>
+<section id="v-input-2" class="level4">
+<h4 class="anchored" data-anchor-id="v-input-2">+5V Input</h4>
 <p>My program reported a motor speed of -1.14 rev/s when I gave the motor +5V from the MCU. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -330,7 +334,7 @@ Note
 <p>Write me interrupt handlers to interface with a quadrature encoder. I’m using the STM32L432KC, what pins should I connect the encoder to in order to allow it to easily trigger the interrupts?</p>
 </div>
 </div>
-<p>GPT5 recommended that I use a hardware timer in encoder mode instead of reading GPIO pins, which I found interesting. It suggested configuring TIM2 such that an over/underflow would cause an interrupt. It also provided the approach I used, but suggested it was a less preferable option.</p>
+<p>GPT5 recommended that I use a hardware timer in encoder mode instead of reading GPIO pins, which I found interesting. It suggested configuring TIM2 such that an over/underflow would cause an interrupt. It also provided the approach I used, but suggested it was a less preferable option. I didn’t find the LLM’s advice particularly useful.</p>
 
 
 </section>
