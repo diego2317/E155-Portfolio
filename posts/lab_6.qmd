@@ -1,0 +1,14 @@
+---
+title: "Lab 6: The IoT and SPI"
+description: ""
+author: "Diego Weiss"
+date: "10/15/25"
+categories:
+  - reflection
+  - labreport
+draft: false
+---
+
+## Introduction
+
+The main goal of this lab was to write C libraries using CMSIS device templates to implement SPI functionality on the MCU. 
