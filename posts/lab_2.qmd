@@ -13,7 +13,7 @@ draft: false
 The goal of this lab was to implement a time multiplexing scheme on the UP5K FPGA to drive two seven-segment displays using only one set of I/0 pins. The full specs of this lab can be found on the [lab 2 page](https://hmc-e155.github.io/lab/lab2/) of the Harvey Mudd E155 website.
 
 ## Technical Documentation
-The source code for the project can be found in the lab 2 folder of my [Github repository for E155](https://github.com/diego2317/E155).
+The source code for the project can be found in the lab 2 folder of my [Github repository for E155](https://github.com/diego2317/E155-labs).
 
 ### Block Diagram
 Before I wrote any SystemVerilog, I created the following block diagram. This helped me understand the structure I believed my design should have prior to implementation.

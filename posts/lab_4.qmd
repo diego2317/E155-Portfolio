@@ -16,7 +16,7 @@ The goal of this lab was to use our STM32 MCUs to play music by toggling a GPIO 
 
 ## Technical Documentation
 
-As always, all the code for this lab can be found in the lab 4 folder of my [Github repository for E155](https://github.com/diego2317/E155).
+As always, all the code for this lab can be found in the lab 4 folder of my [Github repository for E155](https://github.com/diego2317/E155-labs).
 
 ### Circuitry
 

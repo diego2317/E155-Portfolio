@@ -19,7 +19,7 @@ We were given a multitude of parts, both SMT and THT components. Soldering them 
 
 
 ## Technical Documentation
-The source code for the project can be found in the lab 1 folder of my [Github repository for E155](https://github.com/diego2317/E155).
+The source code for the project can be found in the lab 1 folder of my [Github repository for E155](https://github.com/diego2317/E155-labs).
 
 ### Block Diagram
 Figure 2 (below) contains the block diagram used to design the combinational logic to drive the LEDs and 7-segment display. \

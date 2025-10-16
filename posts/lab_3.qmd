@@ -13,7 +13,7 @@ draft:
 The goal of this lab was to learn how to use an FPGA to scan inputs from a keypad, and then output the two most recent inputs on the multiplexed 7-segment display from lab 2. The crux of this lab was ensuring I followed synchronous design principles, as well as designing an FSM that took switch debouncing into account. The [lab 3 page](https://hmc-e155.github.io/lab/lab3/) of the E155 website has more information about the lab.
 
 ## Technical Documentation
-The source code for the project can be found in the lab 3 folder of my [Github repository for E155](https://github.com/diego2317/E155).
+The source code for the project can be found in the lab 3 folder of my [Github repository for E155](https://github.com/diego2317/E155-labs).
 
 ### Circuit Design
 

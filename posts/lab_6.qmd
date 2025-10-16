@@ -11,4 +11,31 @@ draft: false
 
 ## Introduction
 
-The main goal of this lab was to write C libraries using CMSIS device templates to implement SPI functionality on the MCU. 
+The main goal of this lab was to write C libraries using CMSIS device templates to implement SPI functionality on the MCU. Implementing this functionality enabled communication between the STM32L4 MCU and a DS1722 temperature sensor. We were also given code to host a web server on an ESP8266, where we could configure the precision of the sensor and display the readings.
+
+## Technical Documentation
+
+The source code for this lab can be found in the lab 6 folder of my [Github repository for E155](https://github.com/diego2317/E155-labs)
+
+### SPI
+
+The main focus of the lab was the implementation of an SPI library that used the CMSIS device library templates. We were provided with two function stubs: `void initSPI(int br, int cpol, int cpha)` and `char spiSendReceive(char send)`, and were tasked with implementing the functions. I chose PB3, 4, 5, and 7 as my SPI pins. Section 40.4.7 of the [STM32L4 reference manual](https://hmc-e155.github.io/assets/doc/rm0394-stm32l41xxx42xxx43xxx44xxx45xxx46xxx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf) proved extremely valuable in writing the `initSPI` function, as it provided most of the necessary steps to configure SPI on the MCU. Section 40.4.9 also proved extremely valuable as it essentially contained instructions on how to implement `spiSendReceive`.
+
+### Temperature Sensor
+
+In order to provide a user-friendly interface with the temperature sensor, I implemented three functions:
+- `void initDS1722(void)`, which configures the SPI connection on the temperature sensor
+- `void changeResolution(uint8_t bits)`, which allows the user to set the resolution of the sensor in a range of 8-12 bits
+- `float readTemperature(void)`, which allows the user to get a temperature reading from the sensor
+
+Implementing these functions allowed for a user-friendly interface that avoids exposing the SPI protocol and allows the user to easily initialize the sensor, change the resolution, and get temperature readings from the sensor.
+
+### Website
+
+A fun part of this lab was messing around with the Internet of Things. We were provided an ESP8266 that came pre-configured to host a web server. I modified the provided code to give the user a form to select the temperature sensor's resolution, as well as to display the temperature.
+
+### Schematic
+
+In order to interface the MCU with the provided DS1722 temperature sensor and ESP8266, I created the following schematic.
+
+![Schematic](/images/lab6/schematic.png)
