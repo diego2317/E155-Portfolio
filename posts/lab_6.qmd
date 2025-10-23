@@ -30,12 +30,39 @@ In order to provide a user-friendly interface with the temperature sensor, I imp
 
 Implementing these functions allowed for a user-friendly interface that avoids exposing the SPI protocol and allows the user to easily initialize the sensor, change the resolution, and get temperature readings from the sensor.
 
-### Website
-
-A fun part of this lab was messing around with the Internet of Things. We were provided an ESP8266 that came pre-configured to host a web server. I modified the provided code to give the user a form to select the temperature sensor's resolution, as well as to display the temperature.
-
 ### Schematic
 
 In order to interface the MCU with the provided DS1722 temperature sensor and ESP8266, I created the following schematic.
 
 ![Schematic](/images/lab6/schematic.png)
+
+## Results
+The system worked! I was able to get temperature readings to display on my website, along with a selector for the precision of the temperature sensor. I also was able to get a sample SPI transaction using the logic analyzer, seen below.
+
+![Logic Analyzer](/images/lab6/la.jpg)
+
+I spent 13 hours on this lab.
+
+
+## AI Prototype
+
+I began by giving ChatGPT 5 the following prompt:
+
+::: callout-note
+
+I’m making a web portal to interface with a temperature sensor. Create a HTML page that looks good and is intuitive to show the temperature, control an LED, and change the precision of the readout.
+
+:::
+
+It produced the following website
+![AI Website](/images/lab6/prototype_site.png)
+
+I then gave ChatGPT 5 this prompt:
+
+::: callout-note
+
+Write me a C function to carry out a SPI transaction to retrieve a temperature reading from a DS1722 sensor. Make use of CMSIS libraries for the STM32L432KC.
+
+:::
+
+I plugged the function GPT5 gave me into my code and it didn't work. This was probably because I didn't give GPT5 the datasheet for the DS1722. Based on past evidence, I think that if I gave GPT5 the datasheet, it likely would've produced a working function. I tend to not like the code LLMs write, as I tend to find the style unwieldy.
