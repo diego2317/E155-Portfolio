@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.21">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-80c414b3e59ad0d72c8a5310db72653d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -116,6 +117,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -214,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To design my keypad scanning scheme, I made the initial decision that I would drive the rows of the keypad as outputs and read the columns as inputs. I chose to drive my rows high, which meant that to “select” a row to read I would drive it low (keeping the rest of the rows high) and read the columns. If I pressed a key in the row I was reading, it would short that row and column together, which means that a key press is represented by a low voltage level instead of a high one. I used the internal 100 kOhm resistors on the FPGA to enable this behavior. My pin assignments and general wiring are displayed in the circuits below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/schematic.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/schematic.png" class="img-fluid figure-img"></p>
 <figcaption>Circuit</figcaption>
 </figure>
 </div>
@@ -224,13 +227,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The next step I took was developing my FSM. Initially, I planned on utilizing two completely separate FSMs, one for scanning the rows and one for debouncing once a key was pressed. However, I ended up combining my initial two ideas into one big FSM, which can be seen below. In the FSM, a 1 represents a key press being detected and a 0 represents no keys being pressed. I used a counter to keep track of how many clock cycles had passed, with the counter incrementing each clock cycle. In order to deal with the delay from the synchronizer, the FSM stays in the BUFFER states for two clock cycles, which is how long it takes my synchronizer to synchronize the inputs. Whenever the FSM enters any of the ROW, PULSE, or WAIT states, the counter is reset to 0. To solve debouncing, I have the counter increment by 1 per clock cycle if it’s in a DEBOUNCE state. Once counter has incremented 16 times (counter = 15), the transition can be made to the PULSE state if the key is still pressed. In the PULSE state, the FSM sends a signal called PRESS to my next-state logic. PRESS serves as a select signal to determine whether or not a new key has been pressed, which then enables the updating of the 7-segment display. My full FSM can be seen below, as well as its associated state transition table.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/FSM.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/FSM.png" class="img-fluid figure-img"></p>
 <figcaption>FSM</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/state_transition_table.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/state_transition_table.png" class="img-fluid figure-img"></p>
 <figcaption>Truth Table</figcaption>
 </figure>
 </div>
@@ -240,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Implementing this design required 9 separate SystemVerilog modules, including the top-level module and the built-in HSOSC module for clock generation. After initializing a clock to 24 MHz using the HSOSC module, I divided the clock down to 1.2 kHz using a module of my own design. This new “slow clock” then became the system-level clock. The modules for controlling the 7-segment display were taken from lab 2, although the multiplexer module was modified to divide the clock by a factor of two instead of 2^15. This meant that the 7-segment display has a refresh rate of 600Hz, which is sufficient to not notice flickering. I chose a 1.2kHz clock so that once the FSM went through the 16 debounce clock cycles, there would be no risk that the switch was bouncing. This also meant that a button would need to be pressed for approximately 13 ms to be recognized as pressed, which I felt was reasonable. The block diagram for my system can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/blockdiagram.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/blockdiagram.png" class="img-fluid figure-img"></p>
 <figcaption>Block Diagram</figcaption>
 </figure>
 </div>
@@ -250,23 +253,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Before testing my physical system, I wrote testbenches for all of my modules (except for the 7-segment display logic module, which has been the same since lab 1). This meant that once it was time to build my physical system, I was able to get it working quickly. The waveforms and testbench output for my top-level module can be seen below. The Waveform Gallery can be expanded to view the waveforms and testbench output for the rest of my modules.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/top_waves.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/top_waves.png" class="img-fluid figure-img"></p>
 <figcaption>Top Level Module Testbench Waveforms</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/top_terminal.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/top_terminal.png" class="img-fluid figure-img"></p>
 <figcaption>Top Level Module Testbench Output</figcaption>
 </figure>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Waveform Gallery
+<span class="screen-reader-only">Note</span>Waveform Gallery
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -274,61 +277,61 @@ Waveform Gallery
 <div class="callout-body-container callout-body">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/keypad_decoder_waves.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/keypad_decoder_waves.png" class="img-fluid figure-img"></p>
 <figcaption>Keypad Decoder Testbench Waveforms</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/keypad_decoder_terminal.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/keypad_decoder_terminal.png" class="img-fluid figure-img"></p>
 <figcaption>Keypad Decoder Testbench Output</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/keypad_input_waves.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/keypad_input_waves.png" class="img-fluid figure-img"></p>
 <figcaption>Keypad Input Testbench Waveforms</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/keypad_input_terminal.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/keypad_input_terminal.png" class="img-fluid figure-img"></p>
 <figcaption>Keypad Input Testbench Output</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/keypad_reader_waves.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/keypad_reader_waves.png" class="img-fluid figure-img"></p>
 <figcaption>Keypad Reader Testbench Waveforms</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/keypad_reader_terminal.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/keypad_reader_terminal.png" class="img-fluid figure-img"></p>
 <figcaption>Keypad Reader Testbench Output</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/seven_seg_controller_waves.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/seven_seg_controller_waves.png" class="img-fluid figure-img"></p>
 <figcaption>Seven Segment Controller Testbench Waveforms</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/seven_seg_controller_terminal.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/seven_seg_controller_terminal.png" class="img-fluid figure-img"></p>
 <figcaption>Seven Segment Controller Testbench Output</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/synchronizer_waves.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/synchronizer_waves.png" class="img-fluid figure-img"></p>
 <figcaption>Synchronizer Testbench Waveforms</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab3/synchronizer_terminal.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab3/synchronizer_terminal.png" class="img-fluid figure-img"></p>
 <figcaption>Synchronizer Testbench Output</figcaption>
 </figure>
 </div>
@@ -349,7 +352,7 @@ Waveform Gallery
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-LLM Prompt: Whole Lab (Monolithic)
+<span class="screen-reader-only">Note</span>LLM Prompt: Whole Lab (Monolithic)
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -365,18 +368,18 @@ LLM Prompt: Whole Lab (Monolithic)
 </div>
 <p>GPT5 thought for 34 seconds and produced an absolute wall of SystemVerilog, which can be seen in the code block below.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Code (Click to Expand)
+<span class="screen-reader-only">Note</span>Code (Click to Expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb1"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ============================================================================</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ============================================================================</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Clock divider: generates one-cycle enable pulses at requested rates.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// - All state is synchronous to 'clk'.</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// - Produces 'scan_tick'  ~150 Hz (for keypad scan) and</span></span>
@@ -741,7 +744,7 @@ Code (Click to Expand)
 <span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>        .seg         (seg),</span>
 <span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>        .dig_en      (dig_en)</span>
 <span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>    );</span>
-<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -753,7 +756,7 @@ Code (Click to Expand)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-LLM Prompt 1: One‑shot Registration (Debounce‑by‑design)
+<span class="screen-reader-only">Note</span>LLM Prompt 1: One‑shot Registration (Debounce‑by‑design)
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -765,18 +768,18 @@ LLM Prompt 1: One‑shot Registration (Debounce‑by‑design)
 </div>
 <p>GPT5 thought for 47 seconds and produced the following output.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Prompt 1 Output (Click to Expand)
+<span class="screen-reader-only">Note</span>Prompt 1 Output (Click to Expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb2"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// One-shot key registrar with symmetric press/release debounce</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// One-shot key registrar with symmetric press/release debounce</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> keypad_one_shot #(</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">parameter</span> <span class="kw">int</span> DEBOUNCE_CYCLES = <span class="dv">2</span>_000   <span class="co">// tune to your scan/system clock</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)(</span>
@@ -908,7 +911,7 @@ Prompt 1 Output (Click to Expand)
 <span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
 <span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -919,7 +922,7 @@ Prompt 1 Output (Click to Expand)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-LLM Prompt 2: Keypad Scanner Controller
+<span class="screen-reader-only">Note</span>LLM Prompt 2: Keypad Scanner Controller
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -930,18 +933,18 @@ LLM Prompt 2: Keypad Scanner Controller
 </div>
 <p>GPT5 thought for 53 seconds and produced the following SystemVerilog:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Prompt 2 Output (Click to Expand)
+<span class="screen-reader-only">Note</span>Prompt 2 Output (Click to Expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb3"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//------------------------------------------------------------------------------</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//------------------------------------------------------------------------------</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Keypad Scanner for 4x4 matrix (active-low columns and rows)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// - Rotates columns one at a time (active-low one-hot)</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">// - Samples rows (active-low) after a settle delay</span></span>
@@ -1176,7 +1179,7 @@ Prompt 2 Output (Click to Expand)
 <span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a>  <span class="kw">assign</span> key_code = key_code_q;</span>
 <span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a>  <span class="kw">assign</span> any_key  = any_key_q;</span>
 <span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1187,7 +1190,7 @@ Prompt 2 Output (Click to Expand)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-LLM Prompt 3: Integrate and Display
+<span class="screen-reader-only">Note</span>LLM Prompt 3: Integrate and Display
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1198,18 +1201,18 @@ LLM Prompt 3: Integrate and Display
 </div>
 <p>GPT5 thought for 52 seconds and produced the following output:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Prompt 3 Output (Click to Expand)
+<span class="screen-reader-only">Note</span>Prompt 3 Output (Click to Expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb4"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">//------------------------------------------------------------------------------</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">//------------------------------------------------------------------------------</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Top-level: keypad -&gt; one-shot -&gt; 2-digit seven-seg display</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Target: Lattice iCE40 UP5K (uses SB_HFOSC @ ~12 MHz)</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Assumptions:</span></span>
@@ -1379,7 +1382,7 @@ Prompt 3 Output (Click to Expand)
 <span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a>  <span class="kw">assign</span> seg_n   = ~seg_hi_q;</span>
 <span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>  <span class="kw">assign</span> digit_n = ~digit_en_hi_q;</span>
 <span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.21">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,14 +34,15 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-80c414b3e59ad0d72c8a5310db72653d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -84,7 +85,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -110,6 +111,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -215,7 +218,7 @@ window.Quarto = {
 <p>The schematic for this lab was very simple, as the motor could be connected directly to the MCU so long as the encoders were connected to 5V tolerant pins. It was for that reason that I connected the encoders to PA6 and PA8, as those were listed as 5V tolerant by the datasheet.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab5/schematBUTT.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab5/schematBUTT.png" class="img-fluid figure-img"></p>
 <figcaption>Schematic</figcaption>
 </figure>
 </div>
@@ -233,7 +236,7 @@ window.Quarto = {
 <p>A flow chart can be seen below:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab5/flowBUTT.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab5/flowBUTT.png" class="img-fluid figure-img"></p>
 <figcaption>flowchart</figcaption>
 </figure>
 </div>
@@ -258,7 +261,7 @@ window.Quarto = {
 <p>My program reported a motor speed of +2.42 rev/s when I gave the motor -10V. I confirmed the direction visually, as the motor was spinning clockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab5/-10V.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab5/-10V.png" class="img-fluid figure-img"></p>
 <figcaption>-10V Oscilloscope</figcaption>
 </figure>
 </div>
@@ -269,7 +272,7 @@ window.Quarto = {
 <p>My program reported a motor speed of -3.63 rev/s when I gave the motor +15V. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab5/BUTT.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab5/BUTT.png" class="img-fluid figure-img"></p>
 <figcaption>15V Oscilloscope</figcaption>
 </figure>
 </div>
@@ -280,7 +283,7 @@ window.Quarto = {
 <p>My program reported a motor speed of -1.14 rev/s when I gave the motor +5V from the MCU. I confirmed the direction visually, as the motor was spinning counterclockwise. I measured the quadrature signals on an oscilloscope. The signals can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab5/5BUTT.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab5/5BUTT.png" class="img-fluid figure-img"></p>
 <figcaption>5V Oscilloscope</figcaption>
 </figure>
 </div>

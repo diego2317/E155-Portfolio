@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.21">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,14 +34,15 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-80c414b3e59ad0d72c8a5310db72653d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -81,6 +82,8 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -178,7 +181,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="temperature-sensor" class="level3">
 <h3 class="anchored" data-anchor-id="temperature-sensor">Temperature Sensor</h3>
-<p>In order to provide a user-friendly interface with the temperature sensor, I implemented three functions: - <code>void initDS1722(void)</code>, which configures the SPI connection on the temperature sensor - <code>void changeResolution(uint8_t bits)</code>, which allows the user to set the resolution of the sensor in a range of 8-12 bits - <code>float readTemperature(void)</code>, which allows the user to get a temperature reading from the sensor</p>
+<p>In order to provide a user-friendly interface with the temperature sensor, I implemented three functions:</p>
+<ul>
+<li><code>void initDS1722(void)</code>, which configures the SPI connection on the temperature sensor</li>
+<li><code>void changeResolution(uint8_t bits)</code>, which allows the user to set the resolution of the sensor in a range of 8-12 bits</li>
+<li><code>float readTemperature(void)</code>, which allows the user to get a temperature reading from the sensor</li>
+</ul>
 <p>Implementing these functions allowed for a user-friendly interface that avoids exposing the SPI protocol and allows the user to easily initialize the sensor, change the resolution, and get temperature readings from the sensor.</p>
 </section>
 <section id="schematic" class="level3">
@@ -186,7 +194,7 @@ ul.task-list li input[type="checkbox"] {
 <p>In order to interface the MCU with the provided DS1722 temperature sensor and ESP8266, I created the following schematic.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab6/schematic.png" class="img-fluid figure-img"></p>
+<p><img src="../images/lab6/schematic.png" class="img-fluid figure-img"></p>
 <figcaption>Schematic</figcaption>
 </figure>
 </div>
@@ -197,7 +205,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The system worked! I was able to get temperature readings to display on my website, along with a selector for the precision of the temperature sensor. I also was able to get a sample SPI transaction using the logic analyzer, seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="..\images/lab6/la.jpg" class="img-fluid figure-img"></p>
+<p><img src="../images/lab6/la.jpg" class="img-fluid figure-img"></p>
 <figcaption>Logic Analyzer</figcaption>
 </figure>
 </div>
@@ -219,7 +227,7 @@ Note
 <p>I’m making a web portal to interface with a temperature sensor. Create a HTML page that looks good and is intuitive to show the temperature, control an LED, and change the precision of the readout.</p>
 </div>
 </div>
-<p>It produced the following website <img src="..\images/lab6/prototype_site.png" class="img-fluid" alt="AI Website"></p>
+<p>It produced the following website <img src="../images/lab6/prototype_site.png" class="img-fluid" alt="AI Website"></p>
 <p>I then gave ChatGPT 5 this prompt:</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
