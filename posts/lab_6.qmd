@@ -24,6 +24,7 @@ The main focus of the lab was the implementation of an SPI library that used the
 ### Temperature Sensor
 
 In order to provide a user-friendly interface with the temperature sensor, I implemented three functions:
+
 - `void initDS1722(void)`, which configures the SPI connection on the temperature sensor
 - `void changeResolution(uint8_t bits)`, which allows the user to set the resolution of the sensor in a range of 8-12 bits
 - `float readTemperature(void)`, which allows the user to get a temperature reading from the sensor
