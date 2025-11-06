@@ -19,7 +19,8 @@ The source code for the project can be found in the lab 3 folder of my [Github r
 
 Unlike previous labs, I began this one by designing my circuits. I made this decision because I felt like doing so would prove beneficial in going through the rest of the lab. The circuit I designed can be seen below. It features two 2N3906 PNP transistors being used to power the 7-segment display. The rational behind my design choices for the circuitry involving the transistors and the 7-segment display can be found in my [writeup for lab 2](https://diego2317.github.io/E155-Portfolio/posts/lab_2.html). 
 
-To design my keypad scanning scheme, I made the initial decision that I would drive the rows of the keypad as outputs and read the columns as inputs. I chose to drive my rows high, which meant that to "select" a row to read I would drive it low (keeping the rest of the rows high) and read the columns. If I pressed a key in the row I was reading, it would short that row and column together, which means that a key press is represented by a low voltage level instead of a high one. I used the internal 100 kOhm resistors on the FPGA to enable this behavior. My pin assignments and general wiring are displayed in the circuits below.
+
+To design my keypad scanning scheme, I made the initial decision that I would drive the rows of the keypad as outputs and read the columns as inputs. I chose an active-low design, which meant that to "select" a row to read I would drive it low (keeping the rest of the rows high) and read the columns. If I pressed a key in the row I was reading, it would short that row and column together, which means that a key press is represented by a low voltage level instead of a high one. I used the internal 100 kOhm resistors on the FPGA to enable this behavior. However, this design failed, and I made the decision to change to an active-high design, where the current row is driven high, the rest of the rows are set as high-Z, and the columns have external pull-down resistors.
 
 ![Circuit](/images/lab3/schematic.png)
 
@@ -71,7 +72,7 @@ Before testing my physical system, I wrote testbenches for all of my modules (ex
 
 ### Conclusion
 
-The design meets all the requirements. I spent somewhere between 25 and 30 hours on this lab.
+The design meets all the requirements. I spent 45 hours on this lab.
 
 ### AI Prototype
 
