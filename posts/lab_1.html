@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,15 +69,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-80c414b3e59ad0d72c8a5310db72653d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -120,7 +119,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -146,8 +145,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -247,7 +244,7 @@ window.Quarto = {
 <p>We were given a multitude of parts, both SMT and THT components. Soldering them to the E155 development board took approximately three hours, with the first thirty minutes spent attempting to solder the 5V regulator to the board. Figure 1 displays the completed development board.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/lab1/devboard.jpg" class="img-fluid figure-img"></p>
+<p><img src="..\images/lab1/devboard.jpg" class="img-fluid figure-img"></p>
 <figcaption>Figure 1</figcaption>
 </figure>
 </div>
@@ -261,7 +258,7 @@ window.Quarto = {
 </p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/lab1/lab1_blockdiagram.jpg" class="img-fluid figure-img"></p>
+<p><img src="..\images/lab1/lab1_blockdiagram.jpg" class="img-fluid figure-img"></p>
 <figcaption>Figure 2</figcaption>
 </figure>
 </div>
@@ -320,14 +317,14 @@ window.Quarto = {
 <section id="segment-display-control" class="level3">
 <h3 class="anchored" data-anchor-id="segment-display-control">7-Segment Display Control</h3>
 <p>The 7-segment display is controlled by a submodule that converts the input switches (s[3:0]) into a 7-bit output (s[6:0]). The submodule contains a case statement that converts each of the 16 possible 4-bit inputs into the corresponding values needed to illuminate the 7-segment display and create the corresponding hexadecimal number. Because the 7-segment display is common anode, the necessary pins are pulled to 0 to illuminate the necessary segments. For example, the input 4’h0 is converted to 7’b1000000. s[0] corresponds to segment A and s[6] corresponds to segment G of the 7-segment display. See figure 3 for the layout.<br>
-<img src="../images/lab1/7segdisplay.png" class="quarto-figure quarto-figure-center" height="300" alt="Figure 3"></p>
+<img src="..\images/lab1/7segdisplay.png" class="quarto-figure quarto-figure-center" height="300" alt="Figure 3"></p>
 </section>
 <section id="schematic" class="level3">
 <h3 class="anchored" data-anchor-id="schematic">Schematic</h3>
 <p>I consulted the <a href="https://www.alldatasheet.com/datasheet-pdf/view/130748/HP/HDSP-511A.html">datasheet</a> of the HDSP-511A display to determine which FPGA pins I would connect to the 7-segment display. The resultant schematic can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/lab1/lab1schematic_new.png" class="img-fluid figure-img"></p>
+<p><img src="..\images/lab1/lab1schematic_new.png" class="img-fluid figure-img"></p>
 <figcaption>Schematic</figcaption>
 </figure>
 </div>
@@ -338,9 +335,9 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h2>
 <section id="testbench-simulation" class="level3">
 <h3 class="anchored" data-anchor-id="testbench-simulation">Testbench Simulation</h3>
-<p>I created testbenches for each of the submodules (<code>led_controller.sv</code> and <code>display_controller.sv</code>) as well as a testbench for the top-level module. The images below show a screenshot of the QuestaSim simulations for my top-level module. <img src="../images/lab1/lab1_dw_waveforms.png" class="img-fluid" alt="Top level module waveforms"> <img src="../images/lab1/lab1_dw_terminal.png" class="img-fluid" alt="Top level module testbench"><br>
+<p>I created testbenches for each of the submodules (<code>led_controller.sv</code> and <code>display_controller.sv</code>) as well as a testbench for the top-level module. The images below show a screenshot of the QuestaSim simulations for my top-level module. <img src="..\images/lab1/lab1_dw_waveforms.png" class="img-fluid" alt="Top level module waveforms"> <img src="..\images/lab1/lab1_dw_terminal.png" class="img-fluid" alt="Top level module testbench"><br>
 <br>
-Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2.43Hz. The image below is a picture I took of the oscilloscope, where the frequency of the waveform can be seen in the bottom right. <img src="../images/lab1/oscope.jpg" class="img-fluid" alt="Oscilloscope"></p>
+Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2.43Hz. The image below is a picture I took of the oscilloscope, where the frequency of the waveform can be seen in the bottom right. <img src="..\images/lab1/oscope.jpg" class="img-fluid" alt="Oscilloscope"></p>
 </section>
 </section>
 <section id="conclusion" class="level2">
@@ -350,7 +347,7 @@ Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2
 <section id="ai-prototype" class="level2">
 <h2 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h2>
 <p>When I presented ChatGPT 5 with the task of using the Lattice UP5K FPGA’s internal high-speed oscillator to blink an LED at 2Hz, the SystemVerilog it provided synthesized, but Lattice Radiant was unable to place and route the design. It attempted to use the SB_HFOSC module, but provided an alternate solution in the initial Verilog. The code block was as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Use SB_HFOSC (recommended for iCE40UP5K)</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Use SB_HFOSC (recommended for iCE40UP5K)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    SB_HFOSC #(</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        .CLKHF_DIV(HF_DIV)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ) u_hfosc (</span>
@@ -360,7 +357,7 @@ Using an oscilloscope, I determined that led[2] was blinking at a frequency of 2
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    );</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// If your toolflow expects HSOSC instead, you can swap to:</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// HSOSC u_hfosc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(clk_hf));</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// HSOSC u_hfosc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(clk_hf));</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once the project failed to place and route, I commented out the block using <code>SB_HFOSC</code> and uncommented the block using <code>HSOSC</code>. Making this change enabled Lattice Radiant to succesfully place and route the design. I was impressed by the quality of the output. GPT5 avoided overcommenting, which has been an issue in the past. However, the SystemVerilog provided still contained the right amount of comments for me to easily understand it.<br>
 GPT5 used some syntax that was unfamiliar to me. It made use of <code>localparam int unsigned</code> to generate integers, which I hadn’t seen in SystemVerilog before. However, the new syntax it introduced was easy enough to understand. It wouldn’t surprise me the part of the prompt I gave GPT5 that read “Take full advantage of SystemVerilog syntax, for example, using logic instead of wire and reg” contributed to the quality of the Verilog it generated. Moving forward, this serves as a good example of how effective prompting of LLMs can lead to much higher quality output.</p>
 

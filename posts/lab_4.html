@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,15 +34,14 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-80c414b3e59ad0d72c8a5310db72653d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -85,7 +84,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -111,8 +110,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -208,7 +205,7 @@ window.Quarto = {
 <p>I consulted the <a href="https://www.ti.com/lit/ds/symlink/lm386.pdf?ts=1759688431008&amp;ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FLM386%252Fpart-details%252FLM386N-4%252FNOPB">datasheet</a> of the LM386N-4 audio op-amp to design my circuit. It features a potentiometer for volume control, and the LM386N-4 ensures the current draw on the microcontroller stays at acceptable levels.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/lab4/schematic.png" class="img-fluid figure-img"></p>
+<p><img src="..\images/lab4/schematic.png" class="img-fluid figure-img"></p>
 <figcaption>Circuit</figcaption>
 </figure>
 </div>
@@ -219,7 +216,7 @@ window.Quarto = {
 <p>With these formulas, the initial clock value of 80 Mhz, and the range for the auto-reload value of 0 to 65536, a minimum frequency of 1.22Hz (when the auto-reload is 65536) and a maximum frequency of 80 kHz (when the auto-reload is 0) can be determined. To ensure that individual pitches are accurate to within 1% across the frequency range of 220-1000 Hz, I did some calculations in google sheets, which can be seen below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/lab4/frequency_table.png" class="img-fluid figure-img"></p>
+<p><img src="..\images/lab4/frequency_table.png" class="img-fluid figure-img"></p>
 <figcaption>Frequency Calculations</figcaption>
 </figure>
 </div>
